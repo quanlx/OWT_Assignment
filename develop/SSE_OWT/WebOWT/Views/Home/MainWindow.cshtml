@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@model IEnumerable<WebOWT.Models.EntityDataModels.Book>
+@{
+    ViewData["Title"] = "Book List";
+
+    var session = string.Empty;
+    if (HttpContextAccessor.HttpContext.Session.Keys.Count() != 0)
+    {
+        session = HttpContextAccessor.HttpContext.Session.GetString("CheckRole").ToString();
+    }
+}
+
+<h1>Book List</h1>
+
+<form method="get" asp-action="MainWindow">
+    <p>
+        <input type="search" placeholder="Please search" value="@ViewData["SearchKey"]" name="searchKey" />
+        <input type="submit" value="search" class="btn btn-primary" />
+    </p>
+</form>
+<table class="table table-bordered table-condensed table-striped table-hover sortable">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Author
+            </th>
+            <th>
+                Cover Photo
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+
+                <td style="margin-right:10px;">
+                    @Html.DisplayFor(modelItem => b.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => b.Author)
+                </td>
+
+                <td>
+                    <img width="70" height="70" src="@b.CoverPhoto" />
+                </td>
+                <td>
+                    @Html.ActionLink("Detail", "BookDetail", "Home", new { id = b.Id }, null)
+                    <text>&nbsp; &nbsp;</text>
+                    @if (session.Equals("admin"))
+                    {
+                        @Html.ActionLink("Edit", "Edit", "Home", new { id = b.Id }, null)
+                        <text>&nbsp; &nbsp;</text>
+                        @Html.ActionLink("Delete", "Delete", "Home", new { id = b.Id }, null)
+                    }
+                    else if (session.Equals("contributor") && b.Owner.Equals(session))
+                    {
+                        @Html.ActionLink("Edit", "Edit", "Home", new { id = b.Id }, null)
+                        <text>&nbsp; &nbsp;</text>
+                        @Html.ActionLink("Delete", "Delete", "Home", new { id = b.Id }, null)
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
