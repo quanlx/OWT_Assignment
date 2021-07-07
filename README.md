@@ -22,7 +22,7 @@ Normal role:
   
 ============ RESULTS ============  
  
-Check folder Results to see few images that I have tested on my local.
+Download and check folder 'AdminRole - Results' to see few images that I have tested on my local.
 
 
-GOOD LUCK!!!!!!!
+THANKS & GOOD LUCK!!!!!!!
